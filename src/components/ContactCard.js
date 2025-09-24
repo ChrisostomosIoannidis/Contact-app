@@ -1,22 +1,55 @@
 import React from "react";
-import user from "../images/user.png";
+import { Link } from "react-router-dom";
 
-const ContactCard = (props) => {
-  const { id, name, email } = props.contact;
+export default function ContactCard({ contact, clickHandler }) {
+  const { id, name, email } = contact;
+
+  const initials =
+    (name || "")
+      .split(" ")
+      .map((s) => s[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "?";
+
   return (
     <div className="item">
-      <img className="ui avatar image" src={user} alt="user" />
-      <div className="content">
-        <div className="header">{name}</div>
-        <div>{email}</div>
+      <div className="right floated content" style={{ display: "flex", gap: 6 }}>
+        {/* Edit */}
+        <Link to="/edit" state={{ contact }}>
+          <button className="ui icon button blue">
+            <i className="edit outline icon" />
+          </button>
+        </Link>
+        {/* Delete */}
+        <button
+          className="ui icon button orange"
+          onClick={() => clickHandler(id)}
+        >
+          <i className="trash alternate outline icon" />
+        </button>
       </div>
-      <i
-        className="trash alternate outline icon"
-        style={{ color: "red", marginTop: "7px" }}
-        onClick={() => props.clickHander(id)}
-      ></i>
+
+      <div className="content" style={{ display: "flex", gap: 12 }}>
+        <div
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "1px solid rgba(34,36,38,.15)",
+            fontWeight: 600,
+          }}
+        >
+          {initials}
+        </div>
+        <div>
+          <div className="header" style={{ marginBottom: 2 }}>{name}</div>
+          <div style={{ color: "rgba(0,0,0,.6)" }}>{email}</div>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default ContactCard;
+}
